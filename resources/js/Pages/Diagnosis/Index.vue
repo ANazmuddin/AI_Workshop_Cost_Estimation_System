@@ -35,6 +35,15 @@ const categories = ref([
         ]
     },
     {
+        name: 'Area Kelistrikan & Injeksi',
+        symptoms: [
+            { id: 'SYM-008', label: 'Lampu utama sering redup / mati' },
+            { id: 'SYM-009', label: 'Klakson bersuara pelan / mati' },
+            { id: 'SYM-010', label: 'Indikator mesin (Check Engine) menyala' },
+            { id: 'SYM-011', label: 'Starter tangan tidak berfungsi (bunyi cetek-cetek)' },
+        ]
+    },
+    {
         name: 'Area Pengereman',
         symptoms: [
             { id: 'SYM-006', label: 'Rem terasa kurang pakem / blong' },
