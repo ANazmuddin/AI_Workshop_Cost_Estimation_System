@@ -39,39 +39,53 @@ class DiagnosisController extends Controller
             ]);
             
             $aiResult = $response->json();
-            $predictedPart = $aiResult['predicted_part']; // Contoh output: "Kampas Rem Depan"
+            $predictedPart = $aiResult['predicted_part']; // Contoh output: "Aki / Baterai"
             
         } catch (\Exception $e) {
             return back()->withErrors(['message' => 'Gagal terhubung ke server AI. Pastikan server Python (uvicorn) sedang berjalan.']);
         }
 
-        // 3. Ambil Harga Suku Cadang dan Jasa dari Database MariaDB
+        // 3. NORMALISASI MAPPING (Menerjemahkan output AI ke Keyword Database)
+        $keywordMap = [
+            'Kampas Ganda CVT' => 'Kampas Ganda',
+            'Roller CVT'       => 'Roller',
+            'Kampas Rem Depan' => 'Kampas Rem',
+            'Busi'             => 'Busi',
+            'Aki / Baterai'    => 'Aki',
+            'Dinamo Starter'   => 'Starter', // Atau 'Motor Starter' tergantung nama di Excel kamu
+        ];
+
+        // Cek apakah hasil prediksi AI ada di dalam mapping. 
+        // Jika ada, gunakan keyword-nya. Jika tidak, gunakan nama asli dari AI.
+        $searchKeyword = $keywordMap[$predictedPart] ?? $predictedPart;
+
+        // 4. Ambil Harga Suku Cadang dan Jasa dari Database MariaDB
         $motorType = $request->motor_type;
 
-        // Pencarian harga berdasarkan tipe motor dan tebakan AI
+        // Pencarian menggunakan $searchKeyword, BUKAN $predictedPart
         $sparepart = Sparepart::where('motor_type', $motorType)
-            ->where('part_name', 'LIKE', '%' . $predictedPart . '%')
+            ->where('part_name', 'LIKE', '%' . $searchKeyword . '%')
             ->first();
 
         $service = Service::where('motor_type', $motorType)
-            ->where('service_name', 'LIKE', '%' . $predictedPart . '%')
+            ->where('service_name', 'LIKE', '%' . $searchKeyword . '%')
             ->first();
 
-        // 4. Kalkulasi Biaya (Gunakan harga estimasi default jika part tidak ditemukan di database)
+        // 5. Kalkulasi Biaya
         $partName = $sparepart ? $sparepart->part_name : $predictedPart . ' (Estimasi Umum)';
         $partPrice = $sparepart ? (float) $sparepart->price : 65000; 
         $servicePrice = $service ? (float) $service->price : 35000;
 
         $totalPrice = $partPrice + $servicePrice;
 
-        // 5. Kembalikan data hasil kalkulasi ke tampilan Vue.js beserta daftar tipe motor agar dropdown tidak hilang
+        // 6. Kembalikan data hasil kalkulasi ke tampilan Vue.js
         $motorTypes = Sparepart::select('motor_type')->distinct()->orderBy('motor_type', 'asc')->pluck('motor_type');
 
         return Inertia::render('Diagnosis/Index', [
             'motorTypes' => $motorTypes,
             'result' => [
-                'diagnosis' => $predictedPart,
-                'part_name' => $partName,
+                'diagnosis' => $predictedPart, // Tetap tampilkan nama cantik dari AI di nota
+                'part_name' => $partName,      // Tampilkan nama spesifik part dari database
                 'part_price' => $partPrice,
                 'service_price' => $servicePrice,
                 'total_price' => $totalPrice
