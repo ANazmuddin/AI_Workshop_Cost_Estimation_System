@@ -119,7 +119,6 @@ const formatRupiah = (angka) => {
                                 </select>
                             </div>
 
-                            <!-- Looping Checkbox Gejala (Masih List biasa, dirombak ke Grid pada langkah 2) -->
                             <!-- Looping Kategori & Checkbox Gejala (Format Grid Cards) -->
                             <div v-for="category in categories" :key="category.name" class="mb-8">
                                 
@@ -192,43 +191,47 @@ const formatRupiah = (angka) => {
                     <div class="lg:col-span-5">
                         
                         <!-- JIKA ADA HASIL (NOTA GELAP) -->
-                        <div v-if="result" class="bg-gray-800 text-white shadow-xl sm:rounded-2xl p-6 md:p-8 sticky top-6 border border-gray-700">
+                        <div v-if="result" class="bg-gray-800 text-white shadow-xl sm:rounded-2xl p-6 md:p-8 sticky top-6 border border-gray-700 max-h-[85vh] overflow-y-auto">
                             <h3 class="text-xl font-bold mb-6 border-b border-gray-700 pb-4 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                Hasil Analisis AI
+                                Hasil Multi-Diagnosis AI
                             </h3>
                             
-                            <div class="mb-6">
-                                <p class="text-gray-400 text-sm mb-1">Prediksi Kerusakan:</p>
-                                <p class="text-2xl font-bold text-red-400">{{ result.diagnosis }}</p>
-                            </div>
+                            <!-- LOOPING DAFTAR KERUSAKAN -->
+                            <div v-for="(item, index) in result.details" :key="index" class="mb-5 bg-gray-900/60 p-5 rounded-xl border border-gray-700">
+                                <div class="mb-3">
+                                    <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Prediksi Kerusakan {{ index + 1 }}</p>
+                                    <p class="text-lg font-bold text-red-400">{{ item.diagnosis_name }}</p>
+                                </div>
 
-                            <div class="space-y-4 text-sm border-b border-gray-700 pb-6 mb-6">
-                                <div class="flex justify-between items-start gap-4">
-                                    <div class="flex-1">
-                                        <p class="text-gray-400">Suku Cadang:</p>
-                                        <p class="font-medium text-gray-200 mt-1">{{ result.part_name }}</p>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between items-start gap-4">
+                                        <div class="flex-1">
+                                            <p class="text-gray-400 text-xs">Suku Cadang:</p>
+                                            <p class="font-medium text-gray-200 mt-0.5 leading-snug">{{ item.part_name }}</p>
+                                        </div>
+                                        <p class="font-bold text-right">{{ formatRupiah(item.part_price) }}</p>
                                     </div>
-                                    <p class="font-bold text-right">{{ formatRupiah(result.part_price) }}</p>
-                                </div>
-                                <div class="flex justify-between items-center gap-4">
-                                    <p class="text-gray-400">Estimasi Biaya Jasa:</p>
-                                    <p class="font-bold text-right">{{ formatRupiah(result.service_price) }}</p>
+                                    <div class="flex justify-between items-center gap-4 pt-3 mt-3 border-t border-gray-700/50">
+                                        <p class="text-gray-400 text-xs">Biaya Jasa:</p>
+                                        <p class="font-bold text-right">{{ formatRupiah(item.service_price) }}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-700">
-                                <p class="text-gray-400 text-sm mb-1">Total Estimasi:</p>
-                                <p class="text-3xl font-bold text-green-400">{{ formatRupiah(result.total_price) }}</p>
+                            <!-- GRAND TOTAL KESELURUHAN -->
+                            <div class="bg-blue-900/40 p-5 rounded-xl border border-blue-800/50 mt-2">
+                                <p class="text-blue-300 text-sm mb-1">Total Estimasi Keseluruhan:</p>
+                                <p class="text-3xl font-bold text-green-400">{{ formatRupiah(result.grand_total) }}</p>
                             </div>
                             
-                            <div class="mt-6 p-3 bg-blue-900/30 rounded-lg flex gap-3 border border-blue-800/50">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="mt-6 p-3 bg-gray-900/50 rounded-lg flex gap-3 border border-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <p class="text-xs text-blue-200 leading-relaxed">
+                                <p class="text-xs text-gray-400 leading-relaxed">
                                     Harga di atas hanya estimasi awal berdasarkan analisis gejala AI dan dapat berubah sesuai pemeriksaan aktual mekanik.
                                 </p>
                             </div>
