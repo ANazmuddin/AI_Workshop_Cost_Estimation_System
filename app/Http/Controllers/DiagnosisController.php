@@ -45,33 +45,46 @@ class DiagnosisController extends Controller
             return back()->withErrors(['message' => 'Gagal terhubung ke server AI. Pastikan server Python (uvicorn) sedang berjalan.']);
         }
 
-        // 3. NORMALISASI MAPPING (Menerjemahkan output AI ke Keyword Database)
-        $keywordMap = [
-            'Kampas Ganda CVT' => 'Kampas Ganda',
-            'Roller CVT'       => 'Roller',
-            'Kampas Rem Depan' => 'Kampas Rem',
-            'Busi'             => 'Busi',
-            'Aki / Baterai'    => 'Aki',
-            'Dinamo Starter'   => 'Starter', // Atau 'Motor Starter' tergantung nama di Excel kamu
+        // 3. NORMALISASI MAPPING (Menerjemahkan output AI ke Database)
+        
+        // A. Mapping khusus untuk tabel Sparepart (Menggunakan standar istilah Honda/Inggris di CSV)
+        $partKeywordMap = [
+            'Kampas Ganda CVT' => 'WEIGHT SET', // Akan cocok dengan "WEIGHT SET, CLUTCH"
+            'Roller CVT'       => 'ROLLER',     // Akan cocok dengan "ROLLER WEIGHT SET"
+            'Kampas Rem Depan' => 'PAD SET',    // Akan cocok dengan "PAD SET, FR BRAKE"
+            'Busi'             => 'SPARK PLUG', // Akan cocok dengan "SPARK PLUG CPR9EA9"
+            'Aki / Baterai'    => 'BATTERY',    // Akan cocok dengan "BATTERY(GTZ6V)"
+            'Dinamo Starter'   => 'MOTOR UNIT', // Akan cocok dengan "MOTOR UNIT START"
         ];
 
-        // Cek apakah hasil prediksi AI ada di dalam mapping. 
-        // Jika ada, gunakan keyword-nya. Jika tidak, gunakan nama asli dari AI.
-        $searchKeyword = $keywordMap[$predictedPart] ?? $predictedPart;
+        // B. Mapping khusus untuk tabel Service (Menggunakan istilah Indonesia di CSV)
+        $serviceKeywordMap = [
+            'Kampas Ganda CVT' => 'CVT',              // Akan cocok dengan "PEMBERSIHAN CVT"
+            'Roller CVT'       => 'CVT',              // Akan cocok dengan "PENGGANTIAN CVT"
+            'Kampas Rem Depan' => 'KANVAS REM DEPAN', // Akan cocok dengan "PENGGANTIAN KANVAS REM DEPAN"
+            'Busi'             => 'BUSI',             // Akan cocok dengan "PENGGANTIAN BUSI"
+            'Aki / Baterai'    => 'AKI',              // Akan cocok dengan "PENGGANTIAN AKI"
+            'Dinamo Starter'   => 'STATOR',           // Akan cocok dengan "PERBAIKAN STATOR COMP"
+        ];
+
+        // Tentukan keyword pencarian masing-masing
+        $partKeyword = $partKeywordMap[$predictedPart] ?? $predictedPart;
+        $serviceKeyword = $serviceKeywordMap[$predictedPart] ?? $predictedPart;
 
         // 4. Ambil Harga Suku Cadang dan Jasa dari Database MariaDB
         $motorType = $request->motor_type;
 
-        // Pencarian menggunakan $searchKeyword, BUKAN $predictedPart
+        // Pencarian Sparepart menggunakan $partKeyword
         $sparepart = Sparepart::where('motor_type', $motorType)
-            ->where('part_name', 'LIKE', '%' . $searchKeyword . '%')
+            ->where('part_name', 'LIKE', '%' . $partKeyword . '%')
             ->first();
 
+        // Pencarian Service menggunakan $serviceKeyword
         $service = Service::where('motor_type', $motorType)
-            ->where('service_name', 'LIKE', '%' . $searchKeyword . '%')
+            ->where('service_name', 'LIKE', '%' . $serviceKeyword . '%')
             ->first();
 
-        // 5. Kalkulasi Biaya
+        // 5. Kalkulasi Biaya 
         $partName = $sparepart ? $sparepart->part_name : $predictedPart . ' (Estimasi Umum)';
         $partPrice = $sparepart ? (float) $sparepart->price : 65000; 
         $servicePrice = $service ? (float) $service->price : 35000;
