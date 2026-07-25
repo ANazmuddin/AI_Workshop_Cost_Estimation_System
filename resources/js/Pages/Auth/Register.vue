@@ -1,9 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -24,90 +20,92 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <div class="mb-8 text-center">
+            <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
+            <p class="text-sm text-gray-500 mt-2">Daftarkan diri Anda untuk menggunakan layanan AI.</p>
+        </div>
 
-                <TextInput
+        <form @submit.prevent="submit" class="space-y-5">
+            <!-- Name -->
+            <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                <input
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
+                    placeholder="Budi Mekanik"
                 />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <div v-if="form.errors.name" class="text-red-500 text-xs mt-2">{{ form.errors.name }}</div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
+                <input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
                     v-model="form.email"
                     required
                     autocomplete="username"
+                    placeholder="budi@bengkel.com"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div v-if="form.errors.email" class="text-red-500 text-xs mt-2">{{ form.errors.email }}</div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Kata Sandi</label>
+                <input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    placeholder="Minimal 8 karakter"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div v-if="form.errors.password" class="text-red-500 text-xs mt-2">{{ form.errors.password }}</div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
+            <!-- Confirm Password -->
+            <div>
+                <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">Konfirmasi Kata Sandi</label>
+                <input
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    placeholder="Ulangi kata sandi"
                 />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <div v-if="form.errors.password_confirmation" class="text-red-500 text-xs mt-2">{{ form.errors.password_confirmation }}</div>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                class="w-full flex justify-center items-center gap-2 mt-2 px-4 py-3.5 bg-blue-600 rounded-lg font-bold text-white text-sm hover:bg-blue-700 transition-all duration-200"
+                :class="{ 'opacity-50 cursor-not-allowed': form.processing }"
+                :disabled="form.processing"
+            >
+                <svg v-if="form.processing" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Daftar Sekarang</span>
+            </button>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
+            <!-- Login Link -->
+            <p class="text-center text-sm text-gray-600 pt-2">
+                Sudah punya akun?
+                <Link :href="route('login')" class="font-bold text-blue-600 hover:text-blue-500 transition-colors">Masuk di sini</Link>
+            </p>
         </form>
     </GuestLayout>
 </template>
