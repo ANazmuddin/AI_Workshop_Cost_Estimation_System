@@ -4,19 +4,23 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
-    >
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50">
+        <!-- Logo & Branding -->
         <div>
-            <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
+            <Link href="/" class="flex items-center gap-3">
+                <ApplicationLogo class="w-12 h-12 fill-current text-blue-600" />
+                <span class="font-bold text-3xl text-gray-900 tracking-tight">Smart<span class="text-blue-600">Bengkel</span></span>
             </Link>
         </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
+        <!-- Form Container -->
+        <div class="w-full sm:max-w-md mt-10 px-8 py-10 bg-white shadow-xl border border-gray-100 overflow-hidden sm:rounded-2xl">
             <slot />
+        </div>
+        
+        <!-- Footer -->
+        <div class="mt-8 text-center text-xs text-gray-400">
+            &copy; {{ new Date().getFullYear() }} SmartBengkel AI. All rights reserved.
         </div>
     </div>
 </template>
