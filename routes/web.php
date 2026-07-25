@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\DiagnosisController;
+use App\Http\Controllers\CalculatorController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/diagnosis', [DiagnosisController::class, 'index'])->name('diagnosis.index');
     Route::post('/diagnosis/calculate', [DiagnosisController::class, 'calculate'])->name('diagnosis.calculate');
+    Route::get('/calculator', [CalculatorController::class, 'index'])->name('calculator.index');
 });
 
 require __DIR__.'/auth.php';
