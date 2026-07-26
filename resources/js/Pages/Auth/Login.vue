@@ -28,12 +28,12 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div class="mb-8 text-center">
-            <h2 class="text-2xl font-bold text-gray-900">Selamat Datang Kembali</h2>
-            <p class="text-sm text-gray-500 mt-2">Silakan masuk ke akun Anda untuk melanjutkan.</p>
+        <div class="mb-10 text-left lg:text-center">
+            <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Selamat Datang Kembali</h2>
+            <p class="text-base text-gray-500 mt-2">Silakan masuk ke akun Anda untuk melanjutkan.</p>
         </div>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600 text-center bg-green-50 p-3 rounded-lg">
+        <div v-if="status" class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-3 rounded-lg">
             {{ status }}
         </div>
 
@@ -44,7 +44,7 @@ const submit = () => {
                 <input
                     id="email"
                     type="email"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.email"
                     required
                     autofocus
@@ -69,7 +69,7 @@ const submit = () => {
                 <input
                     id="password"
                     type="password"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -89,7 +89,7 @@ const submit = () => {
             <!-- Submit Button -->
             <button
                 type="submit"
-                class="w-full flex justify-center items-center gap-2 px-4 py-3.5 bg-blue-600 rounded-lg font-bold text-white text-sm hover:bg-blue-700 transition-all duration-200"
+                class="w-full flex justify-center items-center gap-2 px-4 py-4 bg-blue-600 rounded-xl font-bold text-white text-base hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all duration-200"
                 :class="{ 'opacity-50 cursor-not-allowed': form.processing }"
                 :disabled="form.processing"
             >
@@ -101,7 +101,7 @@ const submit = () => {
             </button>
 
             <!-- Register Link -->
-            <p class="text-center text-sm text-gray-600 pt-2">
+            <p class="text-center text-sm text-gray-600 pt-4">
                 Belum punya akun?
                 <Link :href="route('register')" class="font-bold text-blue-600 hover:text-blue-500 transition-colors">Daftar sekarang</Link>
             </p>
