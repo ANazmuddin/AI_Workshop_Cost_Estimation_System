@@ -20,9 +20,9 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
-        <div class="mb-8 text-center">
-            <h2 class="text-2xl font-bold text-gray-900">Buat Akun Baru</h2>
-            <p class="text-sm text-gray-500 mt-2">Daftarkan diri Anda untuk menggunakan layanan AI.</p>
+        <div class="mb-10 text-left lg:text-center">
+            <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Buat Akun Baru</h2>
+            <p class="text-base text-gray-500 mt-2">Daftarkan diri Anda untuk menggunakan layanan AI.</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
@@ -32,7 +32,7 @@ const submit = () => {
                 <input
                     id="name"
                     type="text"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.name"
                     required
                     autofocus
@@ -48,7 +48,7 @@ const submit = () => {
                 <input
                     id="email"
                     type="email"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.email"
                     required
                     autocomplete="username"
@@ -63,7 +63,7 @@ const submit = () => {
                 <input
                     id="password"
                     type="password"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
@@ -78,7 +78,7 @@ const submit = () => {
                 <input
                     id="password_confirmation"
                     type="password"
-                    class="block w-full pl-4 pr-4 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg bg-gray-50 transition-colors"
+                    class="block w-full pl-4 pr-4 py-3.5 text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl bg-gray-50/50 transition-all"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
@@ -90,7 +90,7 @@ const submit = () => {
             <!-- Submit Button -->
             <button
                 type="submit"
-                class="w-full flex justify-center items-center gap-2 mt-2 px-4 py-3.5 bg-blue-600 rounded-lg font-bold text-white text-sm hover:bg-blue-700 transition-all duration-200"
+                class="w-full flex justify-center items-center gap-2 mt-4 px-4 py-4 bg-blue-600 rounded-xl font-bold text-white text-base hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all duration-200"
                 :class="{ 'opacity-50 cursor-not-allowed': form.processing }"
                 :disabled="form.processing"
             >
@@ -102,7 +102,7 @@ const submit = () => {
             </button>
 
             <!-- Login Link -->
-            <p class="text-center text-sm text-gray-600 pt-2">
+            <p class="text-center text-sm text-gray-600 pt-4">
                 Sudah punya akun?
                 <Link :href="route('login')" class="font-bold text-blue-600 hover:text-blue-500 transition-colors">Masuk di sini</Link>
             </p>
